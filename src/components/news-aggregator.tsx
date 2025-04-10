@@ -44,19 +44,8 @@ async function fetchNewsFromFeeds(feeds: string[]): Promise<NewsItem[]> {
   for (let i = 0; i < feeds.length; i++) {
     const feedUrl = feeds[i];
     const feedName = feedNames[i];
-    const newsFromThisFeed: NewsItem[] = [];
     try {
-        const feed = await parser.parseURL(feedUrl);
-        feed.items.forEach((item) => {
-          newsFromThisFeed.push({
-            title: item.title || 'Sem título',
-            description: item.contentSnippet || item.content || 'Sem descrição',
-            link: item.link || '#',
-            source: feedName,
-
-          });
-        })
-      } catch (error) {
+      const feed = await parser.parseURL(feedUrl);
         console.error(`Error fetching or parsing feed ${feedUrl}:`, error);
       }
 
@@ -74,7 +63,7 @@ async function fetchNewsFromFeeds(feeds: string[]): Promise<NewsItem[]> {
           }
           newsFromThisFeed.push(newsItem);
         });
-      } catch (error) {
+    } catch (error) {
         console.error(`Erro ao buscar ou analisar o feed ${feedUrl}:`, error);
       }
       allNews.push(newsFromThisFeed);
