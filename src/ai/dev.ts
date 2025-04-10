@@ -1,1 +1,2 @@
-// Flows will be imported for their side effects in this file.
+import '@/ai/flows/generate-artist-description.ts';
+import '@/ai/flows/generate-radio-program-summary.ts';
