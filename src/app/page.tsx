@@ -20,6 +20,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 export default function Home() {
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
 
+  console.log('API Key:', process.env.GOOGLE_GENAI_API_KEY); // Add this line
+
   return (
     <SidebarProvider>
       <div className="flex h-screen">
@@ -54,6 +56,12 @@ export default function Home() {
                   <span>Local Promotions</span>
                 </SidebarMenuButton>
               </SidebarMenuItem>
+              <SidebarMenuItem>
+                <SidebarMenuButton href="/submit-artist">
+                  <Icons.plusCircle className="mr-2 h-4 w-4" />
+                  <span>Submit Artist</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
             </SidebarMenu>
           </SidebarContent>
           <SidebarFooter>
@@ -82,4 +90,5 @@ export default function Home() {
     </SidebarProvider>
   );
 }
+
 
