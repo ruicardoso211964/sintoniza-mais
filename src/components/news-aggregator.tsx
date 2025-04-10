@@ -36,8 +36,8 @@ const rssFeeds = [
   'http://radioideias.com.pt/sintralife/feed/',
 ];
 
-async function fetchNewsFromFeeds(feeds: string[]): Promise<NewsItem[][]> {
-  const parser = new Parser();
+async function fetchNewsFromFeeds(feeds: string[]): Promise<NewsItem[]> {
+    const parser = new Parser();
   const allNews: NewsItem[][] = [];
   const feedNames = ['Rádio Amparo', 'Mundial FM', 'Rádio Caria', 'Rádio Mértola', 'Rádio Ourique', 'Rádio Ideias'];
 
@@ -53,12 +53,31 @@ async function fetchNewsFromFeeds(feeds: string[]): Promise<NewsItem[][]> {
             description: item.contentSnippet || item.content || 'Sem descrição',
             link: item.link || '#',
             source: feedName,
+
           });
         })
       } catch (error) {
         console.error(`Error fetching or parsing feed ${feedUrl}:`, error);
       }
 
+    try {
+        const feed = await parser.parseURL(feedUrl);
+        feed.items.forEach((item) => {
+          const newsItem: NewsItem = {
+            title: item.title || 'Sem título',
+            description: item.contentSnippet || item.content || 'Sem descrição',
+            link: item.link || '#',
+            source: feedName,
+          };
+          if (item.pubDate) {
+            newsItem.date = item.pubDate;
+          }
+          newsFromThisFeed.push(newsItem);
+        });
+      } catch (error) {
+        console.error(`Erro ao buscar ou analisar o feed ${feedUrl}:`, error);
+      }
+      allNews.push(newsFromThisFeed);
   }
 
 
@@ -66,13 +85,13 @@ async function fetchNewsFromFeeds(feeds: string[]): Promise<NewsItem[][]> {
 }
 
 
-const NewsAggregator: React.FC = () => {
 
-  const [newsData, setNewsData] = useState<NewsItem[][]>([mockNewsData]);
+const NewsAggregator: React.FC = () => {
+  const [newsData, setNewsData] = useState<NewsItem[]>([]);
 
 
   useEffect(() => {
-    fetchNewsFromFeeds(rssFeeds).then(news => {
+    fetchNewsFromFeeds(rssFeeds).then((news: any) => {
       setNewsData(news);
     });
   }, []);
@@ -82,19 +101,17 @@ const NewsAggregator: React.FC = () => {
       <div className="mb-6 px-4"> 
         <h2 className="text-3xl font-bold text-gray-800">Notícias Locais</h2>
       </div>
+
       <div className="grid grid-cols-1 gap-6 px-4 md:grid-cols-2 lg:grid-cols-3">
-        {newsData.map((radioNews, radioIndex) => (
-            radioNews.map((news, newsIndex) => (
-                <Card key={`${radioIndex}-${newsIndex}`} className="shadow-md">
+        {newsData.map((news, index) => (
+                <Card key={index} className="shadow-md">
                   <CardHeader>
                     <CardTitle className="text-lg font-semibold">{news.title}</CardTitle>
                   </CardHeader>
                   <CardContent>
                     {news.description && <CardDescription className="text-gray-700">{news.description}</CardDescription>}
-                    <p className="text-gray-500 text-sm mt-2">
-                    <a href={news.link} target="_blank" rel="noopener noreferrer">Ler mais</a>
-                    </p>
-                     {news.source && <p className="text-gray-500 text-sm mt-2">Fonte: {news.source}</p>}
+                    <a href={news.link} target="_blank" rel="noopener noreferrer" className="text-blue-500 hover:underline">Ler mais</a>
+                    {news.source && <p className="text-gray-500 text-sm mt-2">Fonte: {news.source}</p>}
                   </CardContent>
                 </Card>
               ))
