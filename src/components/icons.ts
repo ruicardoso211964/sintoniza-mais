@@ -28,6 +28,7 @@ const Icons = {
   spinner: Loader2,
   trash: Trash,
   user: User,
+  logo: Home, // Replace with your actual logo icon component
 };
 
 export {Icons};
