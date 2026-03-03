@@ -49,10 +49,8 @@
 <div class="layout-container flex h-full grow flex-col">
 <!-- Navigation -->
 <header class="flex items-center justify-between whitespace-nowrap border-b border-white/10 px-6 py-4 lg:px-20 glass sticky top-0 z-50">
-<a class="flex items-center" href="#">
-<img alt="Sintoniza+ Logo" class="h-10 w-auto object-contain" src="assets/img/logo.png"/>
-</a>
-<nav class="hidden md:flex flex-1 justify-center gap-8">
+<nav class="hidden md:flex flex-1 justify-start gap-8">
+<a class="text-slate-300 hover:text-primary text-sm font-medium transition-colors" href="#">Sintoniza+</a>
 <a class="text-slate-300 hover:text-primary text-sm font-medium transition-colors" href="#">Funcionalidades</a>
 <a class="text-slate-300 hover:text-primary text-sm font-medium transition-colors" href="#">Preçário</a>
 <a class="text-slate-300 hover:text-primary text-sm font-medium transition-colors" href="#">Sobre</a>
@@ -86,7 +84,8 @@ endif; ?>
 <span class="flex size-2 rounded-full bg-primary animate-pulse"></span>
 <span class="text-primary text-xs font-bold uppercase tracking-wider">Nova Era 2024</span>
 </div>
-<div class="flex flex-col gap-4">
+<div class="flex flex-col gap-6">
+<img alt="Sintoniza+ Logo Oficial" class="h-28 w-auto object-contain self-start mb-2" src="assets/img/logo.png"/>
 <h1 class="text-white text-5xl lg:text-7xl font-black leading-tight tracking-tight">
                                     A Próxima Geração da <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Radiodifusão</span>
 </h1>
@@ -98,9 +97,9 @@ endif; ?>
 <a href="<?php echo isset($_SESSION['user_id']) ? 'dashboard.php' : 'login.php'; ?>" class="flex min-w-[180px] cursor-pointer items-center justify-center rounded-xl h-14 px-8 bg-primary text-background-dark text-base font-black transition-all hover:shadow-[0_0_20px_rgba(34,211,238,0.4)]">
                                     Começar Agora
                                 </a>
-<button class="flex min-w-[180px] cursor-pointer items-center justify-center rounded-xl h-14 px-8 border border-white/10 hover:bg-white/5 text-white text-base font-bold transition-all">
+<a href="login.php" class="flex min-w-[180px] cursor-pointer items-center justify-center rounded-xl h-14 px-8 border border-white/10 hover:bg-white/5 text-white text-base font-bold transition-all">
                                     Ver Demonstração
-                                </button>
+                                </a>
 </div>
 </div>
 <div class="relative">
