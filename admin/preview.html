@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html class="dark" lang="pt">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>PREVIEW - Admin - Inserção de Fontes</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+    <script>
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    colors: {
+                        "primary": "#137fec",
+                        "background-light": "#f6f7f8",
+                        "background-dark": "#101922",
+                    },
+                    fontFamily: {
+                        "display": ["Inter"]
+                    },
+                    borderRadius: {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .modal {
+            transition: opacity 0.25s ease;
+        }
+        body.modal-active {
+            overflow-x: hidden;
+            overflow-y: hidden !important;
+        }
+    </style>
+</head>
+<body class="bg-background-light dark:bg-background-dark font-display">
+<div class="relative flex min-h-screen w-full">
+    <!-- Sidebar -->
+    <nav class="flex w-64 flex-col gap-4 border-r border-slate-200/10 bg-[#111418] p-4">
+        <div class="flex gap-3 items-center">
+            <div class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-10" style='background-image: url("https://lh3.googleusercontent.com/aida-public/AB6AXuBmLiA4N4W7hWDKm5Sw9YyXrH2ds15UnQ_Cuu93dhsJh7SuJckSqJud-PpEpvhGj1qUfNdQGP_EXlMKKt5hP2YIcbTlBNWCwj7gKkno22cfRs3IZoobgUKvIo4dVXmUnaSTWWDJ99SuTZzaxuPmxHhxMsB56sr0qGiCr8kQXr6brR1xtOcbwmMRM2HnswRPlpswz0cCmQqDwYFEGOP5eXPFAL2Sp_Tiv625scfaX4q5-gePWSBNqz74fbH0ElsAEcdVOUdKot0siwI");'></div>
+            <div class="flex flex-col">
+                <h1 class="text-white text-base font-medium leading-normal">Sintoniza+</h1>
+                <p class="text-slate-400 text-sm font-normal leading-normal">Painel de Controlo</p>
+            </div>
+        </div>
+        <div class="flex flex-col gap-1 mt-4">
+            <a class="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-white/10 transition-colors" href="#">
+                <span class="material-symbols-outlined text-slate-300">dashboard</span>
+                <p class="text-slate-300 text-sm font-medium leading-normal">Dashboard</p>
+            </a>
+            <a class="flex items-center gap-3 px-3 py-2 rounded-lg bg-primary/20" href="#">
+                <span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 1, 'wght' 500;">link</span>
+                <p class="text-primary text-sm font-medium leading-normal">Fontes de Conteúdo</p>
+            </a>
+        </div>
+    </nav>
+
+    <main class="flex-1 p-8">
+        <div class="w-full max-w-7xl mx-auto">
+            
+            <!-- Exemplo de Mensagem -->
+            <div class="mb-4 bg-blue-500/10 border border-blue-500/20 text-blue-400 px-4 py-3 rounded relative" role="alert">
+                <strong class="font-bold">Modo Preview!</strong>
+                <span class="block sm:inline">Isto é apenas uma visualização do design. A base de dados não está ligada.</span>
+            </div>
+
+            <div class="flex flex-wrap justify-between items-start gap-4 mb-8">
+                <div class="flex flex-col gap-2">
+                    <h1 class="text-white text-4xl font-black leading-tight tracking-[-0.033em]">Gestão de Fontes</h1>
+                    <p class="text-slate-400 text-base font-normal leading-normal">Adicione, edite ou remova as fontes de conteúdo da plataforma.</p>
+                </div>
+                <button onclick="openModal('create')" class="flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-white font-semibold py-3 px-5 rounded-lg transition-colors h-12" type="button">
+                    <span class="material-symbols-outlined">add_circle</span>
+                    Adicionar Nova Fonte
+                </button>
+            </div>
+
+            <div class="bg-[#111418] border border-slate-200/10 rounded-xl overflow-hidden">
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm text-slate-300">
+                        <thead class="bg-slate-500/10">
+                            <tr>
+                                <th class="p-4 font-semibold">Nome da Fonte</th>
+                                <th class="p-4 font-semibold">URL</th>
+                                <th class="p-4 font-semibold">Tipo de Conteúdo</th>
+                                <th class="p-4 font-semibold text-right">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Dados Estáticos para Exemplo -->
+                            <tr class="border-t border-slate-200/10">
+                                <td class="p-6 font-medium text-white align-middle">Notícias Locais PT</td>
+                                <td class="p-6 max-w-xs truncate text-slate-400 align-middle">https://exemplo.com/rss/noticias</td>
+                                <td class="p-6 align-middle">
+                                    <span class="inline-flex items-center px-2.5 py-1 text-xs font-medium text-cyan-300 bg-cyan-900/50 rounded-full">Notícias</span>
+                                </td>
+                                <td class="p-6 align-middle">
+                                    <div class="flex justify-end items-center gap-2">
+                                        <button onclick='openModal("update", {id:1, nome:"Notícias Locais PT", url_base:"https://exemplo.com", categoria:"Notícias", ativa:1})' class="flex items-center justify-center size-9 rounded-lg hover:bg-white/10 transition-colors text-slate-400 hover:text-white">
+                                            <span class="material-symbols-outlined text-lg">edit</span>
+                                        </button>
+                                        <button class="flex items-center justify-center size-9 rounded-lg hover:bg-red-500/20 transition-colors text-slate-400 hover:text-red-400">
+                                            <span class="material-symbols-outlined text-lg">delete</span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr class="border-t border-slate-200/10">
+                                <td class="p-6 font-medium text-white align-middle">Agenda Cultural <span class="ml-2 text-xs text-red-400 bg-red-900/30 px-2 py-0.5 rounded">Inativa</span></td>
+                                <td class="p-6 max-w-xs truncate text-slate-400 align-middle">https://cultura.pt/agenda</td>
+                                <td class="p-6 align-middle">
+                                    <span class="inline-flex items-center px-2.5 py-1 text-xs font-medium text-amber-300 bg-amber-900/50 rounded-full">Eventos</span>
+                                </td>
+                                <td class="p-6 align-middle">
+                                    <div class="flex justify-end items-center gap-2">
+                                        <button onclick='openModal("update", {id:2, nome:"Agenda Cultural", url_base:"https://cultura.pt", categoria:"Eventos", ativa:0})' class="flex items-center justify-center size-9 rounded-lg hover:bg-white/10 transition-colors text-slate-400 hover:text-white">
+                                            <span class="material-symbols-outlined text-lg">edit</span>
+                                        </button>
+                                        <button class="flex items-center justify-center size-9 rounded-lg hover:bg-red-500/20 transition-colors text-slate-400 hover:text-red-400">
+                                            <span class="material-symbols-outlined text-lg">delete</span>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- Modal -->
+<div id="sourceModal" class="modal opacity-0 pointer-events-none fixed w-full h-full top-0 left-0 flex items-center justify-center z-50">
+    <div class="modal-overlay absolute w-full h-full bg-black opacity-50"></div>
+    <div class="modal-container bg-[#111418] w-11/12 md:max-w-md mx-auto rounded shadow-lg z-50 overflow-y-auto border border-slate-200/10">
+        <div class="modal-content py-4 text-left px-6">
+            <div class="flex justify-between items-center pb-3 border-b border-slate-200/10">
+                <p class="text-2xl font-bold text-white" id="modalTitle">Adicionar Fonte</p>
+                <div class="modal-close cursor-pointer z-50" onclick="closeModal()">
+                    <span class="material-symbols-outlined text-slate-300">close</span>
+                </div>
+            </div>
+
+            <form id="sourceForm" onsubmit="event.preventDefault(); closeModal(); alert('Dados guardados (Simulação de visualização)!');" class="mt-4">
+                <input type="hidden" name="action" id="formAction" value="create">
+                <input type="hidden" name="id" id="sourceId" value="">
+
+                <div class="mb-4">
+                    <label class="block text-slate-300 text-sm font-bold mb-2" for="nome">Nome da Fonte</label>
+                    <input class="shadow appearance-none border border-slate-600 rounded w-full py-2 px-3 text-white bg-slate-800 leading-tight focus:outline-none focus:shadow-outline focus:border-primary" id="nome" name="nome" type="text" placeholder="Ex: Notícias Locais" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-slate-300 text-sm font-bold mb-2" for="url_base">URL Base</label>
+                    <input class="shadow appearance-none border border-slate-600 rounded w-full py-2 px-3 text-white bg-slate-800 leading-tight focus:outline-none focus:shadow-outline focus:border-primary" id="url_base" name="url_base" type="url" placeholder="https://exemplo.com" required>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-slate-300 text-sm font-bold mb-2" for="url_rss">URL RSS / Feed (Opcional)</label>
+                    <input class="shadow appearance-none border border-slate-600 rounded w-full py-2 px-3 text-white bg-slate-800 leading-tight focus:outline-none focus:shadow-outline focus:border-primary" id="url_rss" name="url_rss" type="url">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-slate-300 text-sm font-bold mb-2" for="categoria">Categoria</label>
+                    <select class="shadow border border-slate-600 rounded w-full py-2 px-3 text-white bg-slate-800 leading-tight focus:outline-none focus:shadow-outline focus:border-primary" id="categoria" name="categoria">
+                        <option value="Notícias">Notícias</option>
+                        <option value="Eventos">Eventos</option>
+                        <option value="Meteorologia">Meteorologia</option>
+                        <option value="Artistas Locais">Artistas Locais</option>
+                        <option value="Novidades Musicais">Novidades Musicais</option>
+                        <option value="Outros">Outros</option>
+                    </select>
+                </div>
+                <div class="mb-6">
+                    <label class="flex items-center">
+                        <input type="checkbox" id="ativa" name="ativa" class="form-checkbox h-5 w-5 text-primary bg-slate-800 border-slate-600 rounded" checked>
+                        <span class="ml-2 text-slate-300 text-sm">Fonte Ativa?</span>
+                    </label>
+                </div>
+                <div class="flex justify-end pt-2">
+                    <button type="button" onclick="closeModal()" class="px-4 py-2 p-3 rounded-lg text-slate-400 bg-transparent hover:bg-white/5 mr-2">Cancelar</button>
+                    <button type="submit" class="px-4 py-2 p-3 rounded-lg bg-primary hover:bg-primary/90 text-white font-bold">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const modal = document.querySelector('.modal');
+    const body = document.querySelector('body');
+
+    function openModal(action, data = null) {
+        modal.classList.remove('opacity-0');
+        modal.classList.remove('pointer-events-none');
+        body.classList.add('modal-active');
+
+        const modalTitle = document.getElementById('modalTitle');
+        const form = document.getElementById('sourceForm');
+
+        if (action === 'update' && data) {
+            modalTitle.innerText = 'Editar Fonte (Simulação)';
+            document.getElementById('sourceId').value = data.id;
+            document.getElementById('nome').value = data.nome;
+            document.getElementById('url_base').value = data.url_base;
+            document.getElementById('categoria').value = data.categoria;
+            document.getElementById('ativa').checked = data.ativa == 1;
+        } else {
+            modalTitle.innerText = 'Adicionar Nova Fonte';
+            form.reset();
+            document.getElementById('ativa').checked = true;
+        }
+    }
+
+    function closeModal() {
+        modal.classList.add('opacity-0');
+        modal.classList.add('pointer-events-none');
+        body.classList.remove('modal-active');
+    }
+
+    modal.addEventListener('click', function(event) {
+        if(event.target === modal || event.target.querySelector('.modal-overlay') === event.target) {
+            closeModal();
+        }
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Mac
+.DS_Store
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# Composer Se aplicável
+vendor/
+
+# Environment Variables
+.env
+.env.local
+
+# Outras lixeiras
+*.zip
+*.tar.gz
+*.rar
