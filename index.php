@@ -80,12 +80,8 @@ endif; ?>
 <div class="max-w-7xl mx-auto px-6 lg:px-20 py-16 lg:py-24">
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
 <div class="flex flex-col gap-8">
-<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 w-fit">
-<span class="flex size-2 rounded-full bg-primary animate-pulse"></span>
-<span class="text-primary text-xs font-bold uppercase tracking-wider">Nova Era 2024</span>
-</div>
 <div class="flex flex-col gap-6">
-<img alt="Sintoniza+ Logo Oficial" class="h-28 w-auto object-contain self-start mb-2" src="assets/img/logo.png"/>
+<img alt="Sintoniza+ Logo Oficial" class="h-40 md:h-56 w-auto object-contain self-start mb-4 drop-shadow-2xl" src="assets/img/logo.png"/>
 <h1 class="text-white text-5xl lg:text-7xl font-black leading-tight tracking-tight">
                                     A Próxima Geração da <span class="text-transparent bg-clip-text bg-gradient-to-r from-primary to-accent">Radiodifusão</span>
 </h1>
@@ -213,7 +209,7 @@ endif; ?>
 <a class="text-slate-500 hover:text-white transition-colors" href="#">Termos</a>
 <a class="text-slate-500 hover:text-white transition-colors" href="#">Privacidade</a>
 </div>
-<p class="text-slate-600 text-sm">© 2024 Sintoniza+. Todos os direitos reservados.</p>
+<p class="text-slate-600 text-sm">© 2026 Sintoniza+. Todos os direitos reservados.</p>
 </div>
 </footer>
 </div>
