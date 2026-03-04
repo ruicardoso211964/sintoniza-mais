@@ -20,7 +20,8 @@ jobs:
         server: sintonizamais.pt
         username: sintoniz
         password: ${{ secrets.FTP_PASSWORD }}
-        server-dir: ./
+        server-dir: public_html/
+        state-name: .deploy-state-${{ github.run_id }}.json
         exclude: |
           **/.git*
           **/.git*/**
