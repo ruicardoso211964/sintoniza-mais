@@ -20,6 +20,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         header("Location: admin_fontes.php");
         exit;
     }
+    if (isset($_POST['action']) && $_POST['action'] === 'add') {
+        $nome = $_POST['nome'] ?? '';
+        $url_base = $_POST['url_base'] ?? '';
+        $categoria = $_POST['categoria'] ?? '';
+        if ($nome && $url_base && $categoria) {
+            $manager->create($nome, $url_base, $categoria);
+        }
+        header("Location: admin_fontes.php");
+        exit;
+    }
 }
 
 $fontes = $manager->getAll();
@@ -112,7 +122,7 @@ $userRole = isset($_SESSION['role']) ? htmlspecialchars($_SESSION['role']) : 'Ad
 </nav>
 <div class="p-4 mt-auto">
 <div class="glass-panel p-4 rounded-xl flex items-center gap-3">
-<img alt="Admin" class="w-10 h-10 rounded-full bg-slate-200" data-alt="Avatar do administrador do sistema" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCPsJY0JXWa8Z994PRZqvZ2UWNEFUk_VkE7xL6GwiR1igDTaYGZ5k5ly3ABfkAnKLXyxC_wfFlFnyVbJ_wnd0xOa3VLi5bAJbCajbfhrS3h7mY7ALrtqijmdeAfUazHhjJ6FIADq_P8fR_fRWPNuK2Uo4yPjtNGt4U0YMADlt-tT2Gs3-8qvCzM4GRZ4OXnyPAMiRYzPBTR650pXfNeKObUwiS_YmG5HbFLYh-19Lge0lBxFEdXNsDOfftHObE2q_PSXCFbVEp7iGA"/>
+<img alt="Admin" class="w-10 h-10 rounded-full bg-slate-200 object-cover border border-slate-700" src="../assets/img/logo.png" />
 <div class="overflow-hidden">
 <p class="text-sm font-semibold truncate"><?php echo $userName; ?></p>
 <p class="text-xs text-slate-500 truncate"><?php echo $userRole; ?></p>
@@ -131,7 +141,7 @@ $userRole = isset($_SESSION['role']) ? htmlspecialchars($_SESSION['role']) : 'Ad
 <h2 class="text-3xl font-extrabold text-slate-900 dark:text-white tracking-tight">Gestão de Fontes</h2>
 <p class="text-slate-500 dark:text-slate-400 mt-1 max-w-lg">Adicione, edite ou remova as fontes de conteúdo da plataforma para manter os feeds atualizados.</p>
 </div>
-<button class="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-xl font-bold transition-all shadow-lg shadow-primary/20 active:scale-95">
+<button onclick="document.getElementById('addModal').classList.remove('hidden')" class="flex items-center gap-2 bg-primary hover:bg-primary/90 text-white px-6 py-3 rounded-xl font-bold transition-all shadow-lg shadow-primary/20 active:scale-95">
 <span class="material-symbols-outlined">add_circle</span>
 <span>Adicionar Nova Fonte</span>
 </button>
@@ -158,12 +168,14 @@ $userRole = isset($_SESSION['role']) ? htmlspecialchars($_SESSION['role']) : 'Ad
 <?php foreach ($fontes as $fonte): ?>
     <div class="source-row grid grid-cols-12 items-center px-6 py-5 glass-panel rounded-xl group transition-all hover:bg-white/5 hover:border-slate-700">
         <div class="col-span-4 flex items-center gap-3">
-            <div class="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center">
+            <div class="w-10 h-10 rounded-lg bg-slate-800 flex items-center justify-center shrink-0">
                 <span class="material-symbols-outlined text-primary">rss_feed</span>
             </div>
-            <span class="font-semibold"><?php echo htmlspecialchars($fonte['nome']); ?></span>
+            <span class="font-semibold truncate"><?php echo htmlspecialchars($fonte['nome']); ?></span>
         </div>
-        <div class="col-span-3 text-sm text-slate-400 font-mono truncate"><?php echo htmlspecialchars($fonte['url_base']); ?></div>
+        <div class="col-span-3 text-sm text-slate-400 font-mono truncate px-2" title="<?php echo htmlspecialchars($fonte['url_base']); ?>">
+            <?php echo htmlspecialchars($fonte['url_base']); ?>
+        </div>
         <div class="col-span-3">
             <span class="px-3 py-1 text-xs font-bold rounded-full <?php echo $manager->getCategoryBadgeClass($fonte['categoria']); ?>">
                 <?php echo htmlspecialchars($fonte['categoria']); ?>
@@ -208,4 +220,44 @@ endif; ?>
 </section>
 </main>
 </div>
+
+<!-- Add Modal -->
+<div id="addModal" class="hidden fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="bg-slate-900 border border-slate-700 rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl">
+        <div class="p-6 border-b border-slate-700 flex justify-between items-center">
+            <h3 class="text-xl font-bold text-white">Adicionar Fonte</h3>
+            <button onclick="document.getElementById('addModal').classList.add('hidden')" class="text-slate-400 hover:text-white">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        <form method="POST" action="admin_fontes.php" class="p-6 space-y-4">
+            <input type="hidden" name="action" value="add">
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-1">Nome da Fonte</label>
+                <input type="text" name="nome" required class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-primary">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-1">URL Base (Site/RSS)</label>
+                <input type="url" name="url_base" required class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-primary" placeholder="https://...">
+            </div>
+            <div>
+                <label class="block text-sm font-medium text-slate-300 mb-1">Categoria (ex: news, music, video)</label>
+                <input type="text" name="categoria" required class="w-full bg-slate-800 border border-slate-700 rounded-lg px-4 py-2.5 text-white focus:outline-none focus:border-primary">
+            </div>
+            <div class="pt-4 flex justify-end gap-3">
+                <button type="button" onclick="document.getElementById('addModal').classList.add('hidden')" class="px-5 py-2.5 rounded-lg font-medium text-slate-300 hover:bg-slate-800 transition-colors">Cancelar</button>
+                <button type="submit" class="px-5 py-2.5 rounded-lg font-bold bg-primary text-white hover:bg-primary/90 transition-colors">Guardar Fonte</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // Fechar modal ao clicar fora
+    document.getElementById('addModal').addEventListener('click', function(e) {
+        if (e.target === this) {
+            this.classList.add('hidden');
+        }
+    });
+</script>
 </body></html>
